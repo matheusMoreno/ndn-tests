@@ -133,7 +133,7 @@ main(int argc, char **argv)
       media = 0;
     } else contador++;
 
-    sleep(1);
+    sleep(15);
   }
 
   std::cout << "Teste terminado. Fechando o arquivo de resultados..." << std::endl;
