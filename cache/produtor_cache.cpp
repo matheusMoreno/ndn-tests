@@ -42,7 +42,7 @@ namespace ndn
       // Criando o conteudo
       shared_ptr<Data> dado = make_shared<Data>();
       dado->setName(nomeDado);
-      dado->setFreshnessPeriod(1200_s); // 20 minutos
+      dado->setFreshnessPeriod(5400_s); // 1h30
       dado->setContent(reinterpret_cast<const uint8_t*>(inf_content.data()), inf_content.size());
 
       // Assinando o dado
