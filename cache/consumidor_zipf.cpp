@@ -16,7 +16,7 @@
 #include <ndn-cxx/face.hpp>
 
 #define NUMERO_CONTEUDOS      10000
-#define NUMERO_PEDIDOS         1000
+#define NUMERO_PEDIDOS         1250
 #define NUMERO_DIVISOES         100
 #define ALPHA_ZIPF              0.8
 
