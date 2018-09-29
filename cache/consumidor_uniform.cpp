@@ -17,7 +17,7 @@
 #define NUMERO_PEDIDOS         1000
 #define NUMERO_DIVISOES         100
 
-#define TEMPO_ESPERA             10
+#define TEMPO_ESPERA              5
 
 std::string nomeBase = "/ufrj/gta/moreno/"; // Nome base dos interesses
 std::ofstream resultados;
@@ -26,6 +26,7 @@ struct timespec inicio, fim;
 double tempo;
 double medias[NUMERO_DIVISOES] = {0.0};
 int qtdePedidos[NUMERO_DIVISOES] = {0};
+bool success = false;
 
 double unifd(int min, int max); // Returns a discrete uniform RV
 long rand_vald(int seed);       // Jain's RNG to return a discrete number
@@ -105,6 +106,7 @@ namespace ndn
     void
     seDado(const Interest& interesse, const Data& dado) {
       std::cout << dado << std::endl;
+      success = true;
     }
 
     void
@@ -130,14 +132,17 @@ main(int argc, char **argv)
 
   for (contador = 0; contador < NUMERO_PEDIDOS; contador++) {
     nConteudo = (int) unifd(0, NUMERO_CONTEUDOS - 1);
-    clock_gettime(CLOCK_MONOTONIC, &inicio);
 
-    try {
-      consumidor.pedir(nConteudo);
-    }
-    catch (const std::exception& e) {
-      std::cerr << "ERRO: " << e.what() << std::endl;
-      break;
+    while (!success) {
+      clock_gettime(CLOCK_MONOTONIC, &inicio);
+
+      try {
+        consumidor.pedir(nConteudo);
+      }
+      catch (const std::exception& e) {
+        std::cerr << "ERRO: " << e.what() << std::endl;
+        break;
+      }
     }
 
     // Calculando o atraso
@@ -151,15 +156,16 @@ main(int argc, char **argv)
     qtdePedidos[nConteudo % NUMERO_DIVISOES] += 1;
 
     sleep(TEMPO_ESPERA);
+    success = false;
   }
 
   // Salvando os resultados no arquivo
-  resultados.open("resultados.txt");
+  resultados.open("resultados-uni.txt");
   resultados << "Valores medios (em ms): \n\n";
 
   for (contador = 0; contador < NUMERO_DIVISOES; contador++) {
     resultados << contador * NUMERO_DIVISOES << "," << qtdePedidos[contador] <<
-               "," << medias[contador] << "," << medias[contador] / qtdePedidos[contador] << std::endl;
+               << << "," << medias[contador] << "," << medias[contador] / qtdePedidos[contador] << std::endl;
   }
 
   std::cout << "Teste terminado. Fechando o arquivo de resultados..." << std::endl;
