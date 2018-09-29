@@ -163,7 +163,7 @@ main(int argc, char **argv)
 {
   ndn::Consumidor consumidor;
 
-  rand_vald((int) time(NULL));
+  rand_val((int) time(NULL));
 
   for (contador = 0; contador < NUMERO_PEDIDOS; contador++) {
     nConteudo = (int) zipf(ALPHA_ZIPF, NUMERO_CONTEUDOS);
