@@ -164,8 +164,8 @@ main(int argc, char **argv)
   resultados << "Valores medios (em ms): \n\n";
 
   for (contador = 0; contador < NUMERO_DIVISOES; contador++) {
-    resultados << contador * NUMERO_DIVISOES << "," << qtdePedidos[contador] <<
-               "," << medias[contador] << "," << medias[contador] / qtdePedidos[contador] << std::endl;
+    resultados << contador * NUMERO_DIVISOES << "," << qtdePedidos[contador] << ","
+      << medias[contador] << "," << medias[contador] / qtdePedidos[contador] << std::endl;
   }
 
   std::cout << "Teste terminado. Fechando o arquivo de resultados..." << std::endl;
