@@ -8,16 +8,17 @@
 
 #include <iostream>
 #include <fstream>
+#include <random>
 #include <stdlib.h>
 #include <string>
 #include <time.h>
 #include <ndn-cxx/face.hpp>
 
 #define NUMERO_CONTEUDOS      10000
-#define NUMERO_PEDIDOS         1000
+#define NUMERO_PEDIDOS         1250
 #define NUMERO_DIVISOES         100
 
-#define TEMPO_ESPERA              5
+#define TEMPO_ESPERA             10
 
 std::string nomeBase = "/ufrj/gta/moreno/"; // Nome base dos interesses
 std::ofstream resultados;
@@ -27,54 +28,6 @@ double tempo;
 double medias[NUMERO_DIVISOES] = {0.0};
 int qtdePedidos[NUMERO_DIVISOES] = {0};
 bool success = false;
-
-double unifd(int min, int max); // Returns a discrete uniform RV
-long rand_vald(int seed);       // Jain's RNG to return a discrete number
-
-double unifd(int min, int max)
-{
-  int    z;                     // Uniform random integer number
-  int    unif_value;            // Computed uniform value to be returned
-
-  // Pull a uniform random integer
-  z = rand_vald(0);
-
-  // Compute uniform discrete random variable using inversion method
-  unif_value = z % (max - min + 1) + min;
-
-  return(unif_value);
-}
-
-long rand_vald(int seed)
-{
-  const long  a =      16807;  // Multiplier
-  const long  m = 2147483647;  // Modulus
-  const long  q =     127773;  // m div a
-  const long  r =       2836;  // m mod a
-  static long x;               // Random int value
-  long        x_div_q;         // x divided by q
-  long        x_mod_q;         // x modulo q
-  long        x_new;           // New x value
-
-  // Set the seed if argument is non-zero and then return zero
-  if (seed > 0)
-  {
-    x = seed;
-    return(0.0);
-  }
-
-  // RNG using integer arithmetic
-  x_div_q = x / q;
-  x_mod_q = x % q;
-  x_new = (a * x_mod_q) - (r * x_div_q);
-  if (x_new > 0)
-    x = x_new;
-  else
-    x = x_new + m;
-
-  // Return a random integer number
-  return(x);
-}
 
 namespace ndn
 {
@@ -128,10 +81,12 @@ main(int argc, char **argv)
 {
   ndn::Consumidor consumidor;
 
-  rand_vald((int) time(NULL));
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(0, 9999);
 
   for (contador = 0; contador < NUMERO_PEDIDOS; contador++) {
-    nConteudo = (int) unifd(0, NUMERO_CONTEUDOS - 1);
+    nConteudo = dis(gen);
 
     while (!success) {
       clock_gettime(CLOCK_MONOTONIC, &inicio);
@@ -152,8 +107,8 @@ main(int argc, char **argv)
 
     // Salvando os resultados
     std::cout << "Atraso: " << tempo << "ms" << std::endl;
-    medias[nConteudo / NUMERO_DIVISOES] += tempo;
-    qtdePedidos[nConteudo / NUMERO_DIVISOES] += 1;
+    medias[nConteudo % NUMERO_DIVISOES] += tempo;
+    qtdePedidos[nConteudo % NUMERO_DIVISOES] += 1;
 
     sleep(TEMPO_ESPERA);
     success = false;
