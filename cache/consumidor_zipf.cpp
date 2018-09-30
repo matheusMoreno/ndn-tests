@@ -17,11 +17,11 @@
 #include <ndn-cxx/face.hpp>
 
 #define NUMERO_CONTEUDOS      10000
-#define NUMERO_PEDIDOS         1000
+#define NUMERO_PEDIDOS         1250
 #define NUMERO_DIVISOES         100
 #define ALPHA_ZIPF              0.8
 
-#define TEMPO_ESPERA              5
+#define TEMPO_ESPERA             10
 
 #define  FALSE          0       // Boolean false
 #define  TRUE           1       // Boolean true
