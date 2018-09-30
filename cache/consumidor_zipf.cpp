@@ -139,7 +139,7 @@ main(int argc, char **argv)
   std::uniform_real_distribution<> dis(0.0, 1.0);
 
   for (contador = 0; contador < NUMERO_PEDIDOS; contador++) {
-    nConteudo = zipf(ALPHA_ZIPF, NUMERO_CONTEUDOS);
+    nConteudo = zipf(ALPHA_ZIPF, NUMERO_CONTEUDOS) - 1;
 
     while (!success) {
       clock_gettime(CLOCK_MONOTONIC, &inicio);
