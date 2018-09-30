@@ -152,8 +152,8 @@ main(int argc, char **argv)
 
     // Salvando os resultados
     std::cout << "Atraso: " << tempo << "ms" << std::endl;
-    medias[nConteudo % NUMERO_DIVISOES] += tempo;
-    qtdePedidos[nConteudo % NUMERO_DIVISOES] += 1;
+    medias[nConteudo / NUMERO_DIVISOES] += tempo;
+    qtdePedidos[nConteudo / NUMERO_DIVISOES] += 1;
 
     sleep(TEMPO_ESPERA);
     success = false;
